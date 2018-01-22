@@ -119,7 +119,15 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    let copy = array.slice()
+    var text = copy;
+    let elements = [];
 
+    var mySet = new Set(text);  
+    for (var el of mySet) {
+      elements.push(Number(el));
+    }
+    return elements
   };
 
 
@@ -150,6 +158,13 @@
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(collection, key) {
+    let newArr = [];
+    for (var el in collection) {
+      newArr.push(collection[el][key]);
+    }
+    return newArr;
+  }
+  
     // TIP: map is really handy when you want to transform an array of
     // values into a new array of values. _.pluck() is solved for you
     // as an example of this.
@@ -162,11 +177,11 @@
     // ];
 
 
-    expect(_.pluck(people, 'name')).to.eql(['moe', 'curly']);
-    return _.map(collection, function(item){
-      return item[key];
-    });
-  };
+    // expect(_.pluck(people, 'name')).to.eql(['moe', 'curly']);
+    // return _.map(collection, function(item){
+    //   return item[key];
+    // });
+  
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(accumulator, item) for each item. accumulator should be
@@ -189,10 +204,9 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-      for (var el of collection) {
-        accumulator = el + el;
+      for (var item of collection) {
+        iterator(accumulator, item)
       }
-      return accumulator;
     }
   
 
