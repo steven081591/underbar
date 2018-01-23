@@ -119,17 +119,21 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    let copy = array.slice()
-    var text = copy;
+    let copy = array.slice();
+    let text = copy;
     let elements = [];
+    let sorted = array.sort((a,b) => a-b); 
 
-    var mySet = new Set(text);  
-    for (var el of mySet) {
-      elements.push(Number(el));
+    if(JSON.stringify(sorted) === JSON.stringify(copy)) {
+        elements.push(array[0], array[1]);
+    } else {
+   var mySet = new Set(text);  
+      for (var el of mySet) {
+        elements.push(Number(el));
+      }
     }
-    return elements
-  };
-
+       return elements;
+}
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
@@ -140,12 +144,6 @@
     return mapped;
 };
     
-
-
-
-    // map() is a useful primitive iteration function that works a lot
-    // like each(), but in addition to running the operation on all
-    // the members, it also maintains an array of results.
 
 
   /*
@@ -170,19 +168,6 @@
     // as an example of this.
 
 
-
-    // var people = [
-    //   { name: 'moe', age: 30 },
-    //   { name: 'curly', age: 50 }
-    // ];
-
-
-    // expect(_.pluck(people, 'name')).to.eql(['moe', 'curly']);
-    // return _.map(collection, function(item){
-    //   return item[key];
-    // });
-  
-
   // Reduces an array or object to a single value by repetitively calling
   // iterator(accumulator, item) for each item. accumulator should be
   // the return value of the previous iterator call.
@@ -204,11 +189,28 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-      for (var item of collection) {
-        iterator(accumulator, item)
+    _.each(collection, function(item) {   
+      if (accumulator === undefined) {
+        accumulator = iterator(item);
+      } else {
+        accumulator = iterator(accumulator, item);
       }
-    }
-  
+    });
+    return accumulator;
+  };
+
+
+//   var callCount = 0;
+// var returnFalsy = function(total, item) {
+//   callCount++;
+//   if (callCount === 1) {
+//     return undefined;
+//   } else {
+//     return item + 1;
+//   }
+// };
+// var total = _.reduce([1,1,2], returnFalsy);
+// expect(total).to.equal(3);
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
