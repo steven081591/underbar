@@ -69,11 +69,7 @@
   // Returns the index at which value can be found in the array, or -1 if value
   // is not present in the array.
   _.indexOf = function(array, target){
-    // TIP: Here's an example of a function that needs to iterate, which we've
-    // implemented for you. Instead of using a standard `for` loop, though,
-    // it uses the iteration helper `each`, which you will need to write.
     var result = -1;
-
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
         result = index;
@@ -103,28 +99,25 @@
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) { 
-     let results = [];
-     for (var i of collection) {
-       if (!test(i)) {
-         results.push(i)
-       }
-     }
-     return results
-    }
+    return _.filter(collection, function(item) {
+        return !test(item);
+      });
+    };
+
  
-  
+
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
 
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    let copy = array.slice();
-    let text = copy;
+    let arr = array.slice();
+    let text = arr;
     let elements = [];
     let sorted = array.sort((a,b) => a-b); 
 
-    if(JSON.stringify(sorted) === JSON.stringify(copy)) {
+    if(JSON.stringify(sorted) === JSON.stringify(arr)) {
         elements.push(array[0], array[1]);
     } else {
    var mySet = new Set(text);  
@@ -189,28 +182,19 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+   let first = true;
     _.each(collection, function(item) {   
-      if (accumulator === undefined) {
-        accumulator = iterator(item);
+      if (first && accumulator === undefined) {
+        accumulator = item;
       } else {
         accumulator = iterator(accumulator, item);
+      first = false;
       }
     });
     return accumulator;
   };
 
 
-//   var callCount = 0;
-// var returnFalsy = function(total, item) {
-//   callCount++;
-//   if (callCount === 1) {
-//     return undefined;
-//   } else {
-//     return item + 1;
-//   }
-// };
-// var total = _.reduce([1,1,2], returnFalsy);
-// expect(total).to.equal(3);
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
@@ -228,12 +212,19 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+    return !! _.reduce(collection, function(a, b) {
+      return a && iterator(b);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    return _.every(collection, function(item) {
+      return collection[item]
+    })
   };
 
 
@@ -324,7 +315,7 @@
   // Randomizes the order of an array's contents.
   //
   // TIP: This function's test suite will ask that you not modify the original
-  // input array. For a tip on how to make a copy of an array, see:
+  // input array. For a tip on how to make a arr of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
   };
