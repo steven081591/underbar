@@ -58,7 +58,7 @@
       for (var i=0; i<collection.length; i++) {
         iterator(collection[i], i, collection);
       }
-   } else {
+   } else if (typeof collection === 'object') {
       for (var el in collection){
         iterator(collection[el], el, collection)
      }  
@@ -90,24 +90,12 @@
     return evens;
   }
   
-  //  function isEven(n) {
-  //   if (n % 2 ===0){
-  //     return n;
-  //   }
-  // }
-  
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) { 
-    return _.filter(collection, function(item) {
-        return !test(item);
-      });
+    return _.filter(collection, item => !test(item));
     };
 
- 
-
-    // TIP: see if you can re-use _.filter() here, without simply
-    // copying code in and modifying it
 
 
   // Produce a duplicate-free version of the array.
@@ -182,13 +170,13 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-   let first = true;
-    _.each(collection, function(item) {   
-      if (first && accumulator === undefined) {
+  //  let first = true;
+    _.each(collection, function(item, i) {   
+      if (accumulator === undefined && i === 0) {
         accumulator = item;
       } else {
         accumulator = iterator(accumulator, item);
-      first = false;
+      // first = false;
       }
     });
     return accumulator;
@@ -221,12 +209,12 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
-    return _.every(collection, function(item) {
-      return collection[item]
-    })
+    // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+    return !! _.reduce(collection, function(a, b) {
+      return a || iterator(b);
+    }, true);
   };
-
 
   /**
    * OBJECTS
@@ -247,7 +235,19 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-  };
+
+  }
+  
+  
+  
+    //   let key = Object.keys(obj2);
+  //   let value = Object.values(obj2);
+  //   obj1[key] = value[0];
+  //   return obj1;
+  // }
+  
+
+
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
