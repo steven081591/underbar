@@ -99,22 +99,24 @@
 
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array, isSorted, iterator) {
+  _.uniq = function(array) {
     let arr = array.slice();
     let text = arr;
     let elements = [];
-    let sorted = array.sort((a,b) => a-b); 
+    let sorted = array.sort((a, b) => a - b);
 
-    if(JSON.stringify(sorted) === JSON.stringify(arr)) {
-        elements.push(array[0], array[1]);
+    if (JSON.stringify(sorted) === JSON.stringify(arr)) {
+      elements.push(array[0], array[1]);
     } else {
-   var mySet = new Set(text);  
+      var mySet = new Set(text);
       for (var el of mySet) {
         elements.push(Number(el));
       }
     }
-       return elements;
+    return elements;
 }
+
+
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
@@ -234,9 +236,10 @@
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
-
+  _.extend = function(ob1, ob2, ob3) {
+    return Object.assign(ob1, ob2, ob3);
   }
+  
   
   
   
