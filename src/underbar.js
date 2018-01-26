@@ -211,47 +211,36 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function (collection, iterator) {
-    // TIP: Try re-using reduce() here.
     iterator = iterator || _.identity;
-    return !!_.reduce(collection, function (a, b) {
-      return a || iterator(b);
-    }, true);
-  };
-
-  /**
-   * OBJECTS
-   * =======
-   *
-   * In this section, we'll look at a couple of helpers for merging objects.
-   */
-
-  // Extend a given object with all the properties of the passed in
-  // object(s).
-  //
-  // Example:
-  //   var obj1 = {key1: "something"};
-  //   _.extend(obj1, {
-  //     key2: "something new",
-  //     key3: "something else new"
-  //   }, {
-  //     bla: "even more stuff"
-  //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function (obj) {
-    let res = {};
-    for (var i of arguments) {
-      res = Object.assign(obj, i);
+    let elements = _.filter(collection, el => iterator(el));
+    if (elements.length >= 1) {
+      return true;
+    } else {
+      return false;
     }
-    return res;
+  }
+
+
+  _.extend = function (obj) {
+    let result = {};
+    for (var i of arguments) {
+      result = Object.assign(obj, i);
+    }
+    return result;
   }
 
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
-  _.defaults = function (ob1, ob2, ob3) {
-    // if (ob1.hasOwnProperty(ob1)) {
-    // return Object.assign(ob1, ob2, ob3);
-    // }
+  _.defaults = function (obj) {
+    let result = {};
+    
+    for (var i of arguments) {
+      result = Object.assign(i, obj);
+    }
+    return result;
   }
+  
 
 
   /**
