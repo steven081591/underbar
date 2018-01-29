@@ -233,13 +233,15 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function (obj) {
-    let result = {};
-    
-    for (var i of arguments) {
-      result = Object.assign(i, obj);
+    let newobj;
+    for (let el of arguments) {
+      if (!(el in obj)) {
+       newobj = Object.assign(el, obj);
+      }
     }
-    return result;
+    return newobj;
   }
+    
   
 
 
@@ -282,7 +284,19 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function (func) {};
+  _.memoize = function (func) {
+    var results = {};
+    return function() {
+      var args = Array.prototype.slice.call(arguments);
+      var key = JSON.stringify(args);
+  
+      if (!(key in results)) {
+        results[key] = func.apply(this, args);
+      }
+  
+      return results[key];
+    };
+  };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -290,7 +304,9 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function (func, wait) {};
+  _.delay = function (func, wait, p1, p2) {
+    setTimeout(func, wait, p1, p2);
+  };
 
 
   /**
