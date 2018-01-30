@@ -233,16 +233,18 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function (obj) {
-    let newobj;
-    for (let el of arguments) {
-      if (!(el in obj)) {
-       newobj = Object.assign(el, obj);
-      }
+    let args = Array.from(arguments)
+    for (var el of args) {
+      let keys = Object.keys(el)
+     for (var i of keys) {
+       if (!(i in obj)) {
+         obj[i] = el[i]
+       }
+     }
     }
-    return newobj;
+     return obj
   }
     
-  
 
 
   /**
@@ -319,8 +321,14 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a arr of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function (array) {};
-
+  _.shuffle = function (a) {
+    let copy = a.slice()
+    for (let i = copy.length - 1; i > 0; i--) {
+        let random = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[random]] = [copy[random], copy[i]];
+    }
+    return copy;
+}
 
   /**
    * ADVANCED
